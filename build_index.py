@@ -2,13 +2,15 @@
 """
 Builder para o index.html da PsicoBase
 Integra todo o conteúdo pedagógico original de 47 aulas + glossários
-com a nova interface moderna, responsiva, intuitiva e o Professor Digital de Psicologia.
+com a nova direção de arte: Editorial Humanista Contemporâneo,
+Ergonomia Cognitiva, Tipografia Lora + Plus Jakarta Sans, Modo Foco Zen,
+Pomodoro com respiração e estética de fichamento de pesquisa.
 """
 
 import os
 import re
 
-with open(r"c:\Users\MatheusRochaLopes\Desktop\PsycoBase\PsicoBase_downloaded.html", "r", encoding="utf-8") as f:
+with open(r"c:\Users\MatheusRochaLopes\Desktop\PsycoBase\PsicoBase.html", "r", encoding="utf-8") as f:
     orig = f.read()
 
 # Extrair bloco de dados curriculares (constantes de conteúdo)
@@ -22,305 +24,556 @@ novo_html = r"""<!DOCTYPE html>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="theme-color" content="#4A1525">
-<meta name="description" content="PsicoBase - Plataforma interativa de estudos e apoio pedagógico em Psicologia">
-<title>PsicoBase · Plataforma Estudantil de Psicologia</title>
+<meta name="description" content="PsicoBase - O espaço onde a mente humana é estudada com profundidade, método e acolhimento.">
+<title>PsicoBase · Onde a Mente Humana é Estudada com Rigor e Acolhimento</title>
+
+<!-- Tipografia: Lora (Editorial Clássico) + Plus Jakarta Sans (Ergonomia Digital) -->
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Lora:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,500;0,600;0,700;1,400;1,600&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
 <style>
-:root{
-  --primaria:#4A1525;
-  --primaria-hover:#38101C;
-  --primaria-leve:rgba(74,21,37,0.08);
-  --secundaria:#7D5295;
-  --acento:#9D71E8;
-  --lavanda:#EEDBFA;
-  --verde:#2E6B4A;
-  --verde-leve:rgba(46,107,74,0.1);
-  --vermelho:#A62626;
-  --vermelho-leve:rgba(166,38,38,0.1);
-  --amarelo:#B27B10;
+/* ==========================================================================
+   DESIGN SYSTEM PSICOBASE: EDITORIAL HUMANISTA CONTEMPORÂNEO
+   ========================================================================== */
+:root {
+  /* Paleta Modo Claro: Estúdio de Pesquisa & Biblioteca Acolhedora */
+  --bg-canvas: #F8F6F0;       /* Linho / Pergaminho suave (elimina fadiga ocular) */
+  --bg-card: #FFFFFF;         /* Superfície de cartão pura */
+  --bg-fichamento: #FAF8F4;   /* Tom de papel de ficha bibliográfica */
+  --bg-sepia: #F3ECE1;       /* Sepia sutil para destaques */
+  --fg-base: #242124;         /* Grafite quente e profundo */
+  --fg-muted: #645D68;        /* Cinza grafite atenuado */
+  --borda-suave: #E7E1D8;     /* Linha de encadernação clássica */
+  --borda-foco: #7A5C91;
+
+  /* Cores de Identidade & Afeto */
+  --primaria: #4A1525;        /* Bordô / Vinho Clássico (rigor e história) */
+  --primaria-hover: #380F1B;
+  --primaria-tint: rgba(74, 21, 37, 0.07);
+  --secundaria: #7A5C91;      /* Lavanda Aveludada / Ametista (psique e calmaria) */
+  --secundaria-tint: rgba(122, 92, 145, 0.12);
   
-  --bg:#F9F6F0;
-  --bg-card:#FFFFFF;
-  --bg-subtil:#F2ECE4;
-  --fg:#221E24;
-  --fg-muted:#6B6471;
-  --borda:#E4DCD3;
-  --sombra:0 4px 20px rgba(45,30,40,0.06);
-  --sombra-card:0 2px 10px rgba(45,30,40,0.04);
-  --raio:16px;
-  --raio-sm:10px;
-  --fonte-sans:'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
-  --fonte-serif:'Lora', Georgia, serif;
+  /* Cores Funcionais de Redução de Carga Mental */
+  --salvia: #3A7356;          /* Verde Sálvia (foco sereno e acertos) */
+  --salvia-tint: rgba(58, 115, 86, 0.12);
+  --terracota: #BD6148;       /* Terracota Suave (atenção sem alarme punitivo) */
+  --terracota-tint: rgba(189, 97, 72, 0.12);
+  --ambar: #C28D38;           /* Ocre / Âmbar Antigo (conquistas e consistência) */
+  --ambar-tint: rgba(194, 141, 56, 0.12);
+
+  /* Sombras Táteis & Orgânicas */
+  --sombra-card: 0 4px 16px rgba(50, 40, 35, 0.04), 0 1px 3px rgba(50, 40, 35, 0.03);
+  --sombra-hover: 0 8px 26px rgba(50, 40, 35, 0.08), 0 2px 6px rgba(50, 40, 35, 0.04);
+  --sombra-flutuante: 0 12px 36px rgba(74, 21, 37, 0.12);
+
+  /* Tipografia & Métricas de Leitura */
+  --font-serif: 'Lora', Georgia, 'Times New Roman', serif;
+  --font-sans: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
+  --leitura-max-ch: 70ch;
+  --line-height-leitura: 1.72;
+  --radius-card: 16px;
+  --radius-pill: 9999px;
+
+  /* Easing Orgânico Calm Tech (respiração) */
+  --calm-ease: cubic-bezier(0.2, 0.8, 0.2, 1);
+  --duracao-rapida: 0.2s;
+  --duracao-padrao: 0.35s;
 }
 
-body.escuro{
-  --primaria:#D992A8;
-  --primaria-hover:#E6B0C0;
-  --primaria-leve:rgba(217,146,168,0.15);
-  --secundaria:#C09EE6;
-  --acento:#B887FF;
-  --lavanda:#382747;
-  --verde:#5CC48C;
-  --verde-leve:rgba(92,196,140,0.15);
-  --vermelho:#FF7575;
-  --vermelho-leve:rgba(255,117,117,0.15);
-  --amarelo:#F5BA42;
-  
-  --bg:#141318;
-  --bg-card:#1F1D26;
-  --bg-subtil:#292733;
-  --fg:#F5F2F8;
-  --fg-muted:#A69EB1;
-  --borda:#383444;
-  --sombra:0 4px 20px rgba(0,0,0,0.4);
-  --sombra-card:0 2px 10px rgba(0,0,0,0.25);
+body.escuro {
+  /* Paleta Modo Escuro: Sessão Noturna de Leitura & Consultório Introspectivo */
+  --bg-canvas: #131217;       /* Ardósia profunda com subtom roxo/índigo */
+  --bg-card: #1E1B24;         /* Superfície de leitura noturna */
+  --bg-fichamento: #25222D;
+  --bg-sepia: #2B2633;
+  --fg-base: #F4F1F7;
+  --fg-muted: #A39BAA;
+  --borda-suave: #302B3A;
+  --borda-foco: #C7A7EC;
+
+  --primaria: #E29BB0;        /* Bordô rosé acolhedor */
+  --primaria-hover: #F0B3C4;
+  --primaria-tint: rgba(226, 155, 176, 0.15);
+  --secundaria: #C7A7EC;      /* Lavanda luminosa */
+  --secundaria-tint: rgba(199, 167, 236, 0.16);
+
+  --salvia: #66D39D;          /* Menta serena */
+  --salvia-tint: rgba(102, 211, 157, 0.15);
+  --terracota: #FF8A73;
+  --terracota-tint: rgba(255, 138, 115, 0.15);
+  --ambar: #F0BF65;
+  --ambar-tint: rgba(240, 191, 101, 0.15);
+
+  --sombra-card: 0 4px 20px rgba(0, 0, 0, 0.35);
+  --sombra-hover: 0 8px 30px rgba(0, 0, 0, 0.5);
+  --sombra-flutuante: 0 12px 40px rgba(0, 0, 0, 0.65);
 }
 
-*{box-sizing:border-box}
-[hidden]{display:none!important}
-html,body{margin:0;padding:0;font-family:var(--fonte-sans);background:var(--bg);color:var(--fg);line-height:1.65;-webkit-font-smoothing:antialiased}
-body.grande{font-size:112%}
+/* Reset Universal com Foco em Fluidez */
+*, *::before, *::after { box-sizing: border-box; }
+[hidden] { display: none !important; }
+html { scroll-behavior: smooth; }
 
-/* Layout principal */
-.app-header{
-  position:sticky;top:0;z-index:50;
-  background:rgba(255,255,255,0.85);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);
-  border-bottom:1px solid var(--borda);
-  padding:10px 18px;display:flex;align-items:center;justify-content:space-between;gap:12px;
+body {
+  margin: 0; padding: 0;
+  font-family: var(--font-sans);
+  background-color: var(--bg-canvas);
+  color: var(--fg-base);
+  line-height: 1.65;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  transition: background-color var(--duracao-padrao) var(--calm-ease), color var(--duracao-padrao) var(--calm-ease);
 }
-body.escuro .app-header{background:rgba(31,29,38,0.85)}
+body.grande { font-size: 112%; }
 
-.header-brand{display:flex;align-items:center;gap:10px;text-decoration:none;color:var(--primaria);font-weight:800;font-size:1.25rem}
-.header-brand .logo-icon{width:32px;height:32px;border-radius:10px;background:var(--primaria);color:#fff;display:flex;align-items:center;justify-content:center;font-size:1.15rem;font-weight:700}
-body.escuro .header-brand .logo-icon{background:var(--lavanda);color:var(--primaria)}
-
-.header-actions{display:flex;align-items:center;gap:8px}
-
-.btn-header{
-  display:inline-flex;align-items:center;gap:6px;
-  background:var(--bg-subtil);color:var(--fg);border:1px solid var(--borda);
-  padding:6px 12px;border-radius:20px;font-size:0.85rem;font-weight:600;cursor:pointer;
-  transition:all 0.2s ease;
+/* ==========================================================================
+   ESTILOS DE CABEÇALHO & IDENTIDADE VISUAL (PSI)
+   ========================================================================== */
+.app-header {
+  position: sticky; top: 0; z-index: 50;
+  background: rgba(248, 246, 240, 0.9);
+  backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px);
+  border-bottom: 1px solid var(--borda-suave);
+  padding: 12px 24px;
+  display: flex; align-items: center; justify-content: space-between; gap: 16px;
+  transition: all var(--duracao-padrao) var(--calm-ease);
 }
-.btn-header:hover{background:var(--lavanda);border-color:var(--secundaria)}
+body.escuro .app-header { background: rgba(19, 18, 23, 0.9); }
 
-/* Pomodoro Widget */
-.pomo-widget{
-  display:inline-flex;align-items:center;gap:6px;
-  background:var(--primaria-leve);border:1px solid var(--borda);
-  padding:4px 10px;border-radius:20px;font-size:0.85rem;font-weight:700;color:var(--primaria);
+.header-brand {
+  display: flex; align-items: center; gap: 12px;
+  text-decoration: none; color: var(--primaria);
+  font-family: var(--font-serif); font-weight: 700; font-size: 1.35rem;
+  letter-spacing: -0.01em;
 }
-.pomo-btn{background:none;border:none;cursor:pointer;color:inherit;font-size:0.9rem;padding:2px 4px}
 
-/* Navegação */
-nav.inferior{
-  position:fixed;bottom:0;left:0;right:0;
-  background:rgba(255,255,255,0.95);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);
-  border-top:1px solid var(--borda);
-  display:flex;justify-content:space-around;z-index:40;
-  padding-bottom:env(safe-area-inset-bottom);
+/* Marca d'água / Símbolo Psi Minimalista */
+.psi-emblem {
+  width: 36px; height: 36px; border-radius: 12px;
+  background: var(--primaria); color: #FFF;
+  display: flex; align-items: center; justify-content: center;
+  font-family: var(--font-serif); font-size: 1.3rem; font-weight: 600;
+  box-shadow: 0 2px 8px rgba(74, 21, 37, 0.2);
+  transition: transform var(--duracao-padrao) var(--calm-ease);
 }
-body.escuro nav.inferior{background:rgba(31,29,38,0.95)}
-
-nav.inferior a{
-  flex:1;text-align:center;padding:8px 4px;font-size:0.75rem;font-weight:600;
-  text-decoration:none;color:var(--fg-muted);display:flex;flex-direction:column;
-  align-items:center;gap:4px;min-height:56px;justify-content:center;
-  transition:color 0.2s, transform 0.1s;
+body.escuro .psi-emblem {
+  background: var(--primaria-tint); color: var(--primaria);
+  border: 1px solid var(--primaria);
 }
-nav.inferior a svg{width:22px;height:22px;stroke-width:2.1}
-nav.inferior a[aria-current="page"]{color:var(--primaria);font-weight:700}
-nav.inferior a[aria-current="page"] svg{stroke:var(--primaria)}
+.header-brand:hover .psi-emblem { transform: rotate(-5deg) scale(1.05); }
 
-.wrap{max-width:820px;margin:0 auto;padding:20px 18px 100px}
+/* Pomodoro com Respiração & Pílula de Foco */
+.pomo-pill {
+  display: inline-flex; align-items: center; gap: 8px;
+  background: var(--bg-card); border: 1px solid var(--borda-suave);
+  padding: 6px 14px; border-radius: var(--radius-pill);
+  font-family: var(--font-sans); font-size: 0.88rem; font-weight: 700;
+  color: var(--primaria); box-shadow: var(--sombra-card);
+  transition: all var(--duracao-padrao) var(--calm-ease);
+}
+.pomo-breath-circle {
+  width: 8px; height: 8px; border-radius: 50%;
+  background: var(--salvia);
+  display: inline-block;
+}
+.pomo-pill.ativo .pomo-breath-circle {
+  animation: pulseBreath 3s infinite var(--calm-ease);
+}
+@keyframes pulseBreath {
+  0%, 100% { transform: scale(1); opacity: 0.6; }
+  50% { transform: scale(1.8); opacity: 1; box-shadow: 0 0 10px var(--salvia); }
+}
 
-/* Desktop */
-@media (min-width:920px){
-  body{padding-left:260px;padding-bottom:0}
-  .app-header{left:260px;width:calc(100% - 260px)}
-  nav.inferior{
-    top:0;bottom:0;left:0;right:auto;width:260px;
-    flex-direction:column;justify-content:flex-start;gap:6px;
-    padding:24px 16px;border-top:0;border-right:1px solid var(--borda);
+.btn-icon-subtle {
+  background: none; border: none; cursor: pointer; color: inherit;
+  padding: 2px 6px; font-size: 0.95rem; border-radius: 6px;
+  display: inline-flex; align-items: center; justify-content: center;
+  transition: background-color var(--duracao-rapida);
+}
+.btn-icon-subtle:hover { background: var(--primaria-tint); }
+
+.header-actions { display: flex; align-items: center; gap: 10px; }
+
+.btn-header {
+  display: inline-flex; align-items: center; gap: 6px;
+  background: var(--bg-card); color: var(--fg-base);
+  border: 1px solid var(--borda-suave); padding: 7px 14px;
+  border-radius: var(--radius-pill); font-size: 0.86rem; font-weight: 600;
+  cursor: pointer; transition: all var(--duracao-rapida) var(--calm-ease);
+}
+.btn-header:hover {
+  border-color: var(--secundaria); background: var(--secundaria-tint);
+  transform: translateY(-1px);
+}
+
+/* ==========================================================================
+   NAVEGAÇÃO TÁTIL & SIDEBAR DESKTOP
+   ========================================================================== */
+nav.inferior {
+  position: fixed; bottom: 0; left: 0; right: 0;
+  background: rgba(248, 246, 240, 0.95);
+  backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px);
+  border-top: 1px solid var(--borda-suave);
+  display: flex; justify-content: space-around; z-index: 40;
+  padding-bottom: env(safe-area-inset-bottom);
+  transition: background var(--duracao-padrao) var(--calm-ease);
+}
+body.escuro nav.inferior { background: rgba(19, 18, 23, 0.95); }
+
+nav.inferior a {
+  flex: 1; text-align: center; padding: 10px 4px;
+  font-size: 0.74rem; font-weight: 600; text-decoration: none;
+  color: var(--fg-muted); display: flex; flex-direction: column;
+  align-items: center; gap: 4px; min-height: 58px; justify-content: center;
+  transition: color var(--duracao-rapida), transform var(--duracao-rapida);
+}
+nav.inferior a svg { width: 22px; height: 22px; stroke-width: 2.1; transition: stroke var(--duracao-rapida); }
+nav.inferior a[aria-current="page"] { color: var(--primaria); font-weight: 700; }
+nav.inferior a[aria-current="page"] svg { stroke: var(--primaria); }
+
+.wrap {
+  max-width: 860px; margin: 0 auto;
+  padding: 24px 20px 100px;
+}
+
+/* Desktop Sidebar Editorial */
+@media (min-width: 960px) {
+  body { padding-left: 270px; padding-bottom: 0; }
+  .app-header { left: 270px; width: calc(100% - 270px); }
+  nav.inferior {
+    top: 0; bottom: 0; left: 0; right: auto; width: 270px;
+    flex-direction: column; justify-content: flex-start; gap: 6px;
+    padding: 30px 18px; border-top: 0; border-right: 1px solid var(--borda-suave);
   }
-  .nav-header{padding:0 8px 16px;margin-bottom:8px;border-bottom:1px solid var(--borda);display:flex;align-items:center;gap:10px}
-  nav.inferior a{
-    flex:none;flex-direction:row;justify-content:flex-start;gap:12px;
-    padding:12px 14px;border-radius:12px;font-size:0.95rem;min-height:46px;
+  .nav-header-desktop {
+    padding: 0 10px 24px; margin-bottom: 12px;
+    border-bottom: 1px solid var(--borda-suave);
+    display: flex; align-items: center; gap: 12px;
   }
-  nav.inferior a[aria-current="page"]{
-    background:var(--primaria-leve);color:var(--primaria);border-left:4px solid var(--primaria);
+  nav.inferior a {
+    flex: none; flex-direction: row; justify-content: flex-start; gap: 14px;
+    padding: 12px 16px; border-radius: 12px; font-size: 0.95rem; min-height: 48px;
   }
-  .wrap{max-width:960px;padding:32px 36px 60px}
+  nav.inferior a[aria-current="page"] {
+    background: var(--primaria-tint); color: var(--primaria);
+    border-left: 4px solid var(--primaria); font-weight: 700;
+  }
+  .wrap { max-width: 980px; padding: 36px 44px 80px; }
 }
 
-/* Tipografia e Componentes */
-h1,h2,h3{color:var(--fg);font-weight:700;line-height:1.25}
-h1{font-size:1.75rem;margin:0.5rem 0 1rem;letter-spacing:-0.02em}
-h2{font-size:1.3rem;margin:1.6rem 0 0.8rem;color:var(--primaria)}
-h3{font-size:1.1rem;margin:1rem 0 0.4rem}
-a{color:var(--primaria);text-decoration:none}
-a:hover{text-decoration:underline}
-.muted{color:var(--fg-muted);font-size:0.92rem}
-
-.card{
-  background:var(--bg-card);border:1px solid var(--borda);
-  border-radius:var(--raio);padding:20px;margin:16px 0;
-  box-shadow:var(--sombra-card);
-  transition:transform 0.15s ease, box-shadow 0.15s ease;
+/* ==========================================================================
+   TIPOGRAFIA & CARDS COM TEXTURA DE FICHA BIBLIOGRÁFICA
+   ========================================================================== */
+h1, h2, h3, h4 {
+  color: var(--fg-base); font-family: var(--font-serif);
+  font-weight: 600; line-height: 1.3;
 }
-.card.destaque{border-left:5px solid var(--primaria);background:linear-gradient(135deg, var(--bg-card), var(--bg-subtil))}
-
-.btn{
-  display:inline-flex;align-items:center;justify-content:center;gap:8px;
-  background:var(--primaria);color:#fff;border:2px solid var(--primaria);
-  border-radius:12px;padding:10px 18px;font-family:inherit;font-weight:600;font-size:0.95rem;
-  cursor:pointer;min-height:44px;text-decoration:none;margin:4px 6px 4px 0;
-  box-shadow:0 2px 6px rgba(74,21,37,0.15);transition:all 0.2s ease;
+h1 {
+  font-size: 2.15rem; margin: 0.4rem 0 1.2rem;
+  letter-spacing: -0.025em; font-weight: 700;
 }
-.btn:hover{background:var(--primaria-hover);border-color:var(--primaria-hover);text-decoration:none;transform:translateY(-1px)}
-.btn.sec{background:transparent;color:var(--primaria);border-color:var(--borda);box-shadow:none}
-.btn.sec:hover{background:var(--primaria-leve);border-color:var(--primaria)}
-.btn.sm{padding:6px 12px;font-size:0.85rem;min-height:36px;border-radius:8px}
-.btn.sucesso{background:var(--verde);border-color:var(--verde)}
-.btn:disabled{opacity:0.5;cursor:not-allowed;transform:none}
-
-.grid{display:grid;grid-template-columns:repeat(auto-fit, minmax(260px, 1fr));gap:16px;margin:16px 0}
-.grid-stats{display:grid;grid-template-columns:repeat(auto-fit, minmax(130px, 1fr));gap:12px;margin:14px 0}
-
-.stat-box{
-  background:var(--bg-card);border:1px solid var(--borda);
-  border-radius:14px;padding:14px;text-align:center;
-  box-shadow:var(--sombra-card);
+h2 {
+  font-size: 1.45rem; margin: 2rem 0 0.9rem;
+  color: var(--primaria); border-bottom: 1px solid var(--borda-suave);
+  padding-bottom: 6px;
 }
-.stat-box .num{font-size:1.6rem;font-weight:800;color:var(--primaria);display:block;line-height:1.2}
-.stat-box .rotulo{font-size:0.82rem;font-weight:600;color:var(--fg-muted);text-transform:uppercase;letter-spacing:0.04em}
+h3 { font-size: 1.15rem; margin: 1.2rem 0 0.4rem; }
 
-.barra{height:8px;background:var(--borda);border-radius:99px;overflow:hidden;margin:8px 0}
-.barra>div{height:100%;background:var(--verde);transition:width 0.4s ease}
-
-.tag{
-  display:inline-flex;align-items:center;gap:4px;
-  background:var(--lavanda);color:#221E24;padding:3px 10px;
-  border-radius:99px;font-size:0.8rem;font-weight:600;
+p {
+  font-size: 1.05rem; line-height: var(--line-height-leitura);
+  max-width: var(--leitura-max-ch);
 }
-.tag.concluido{background:var(--verde-leve);color:var(--verde)}
-.tag.pendente{background:var(--primaria-leve);color:var(--primaria)}
+.muted { color: var(--fg-muted); font-size: 0.92rem; }
 
-.campo{
-  width:100%;padding:12px 14px;border-radius:12px;
-  border:1px solid var(--borda);background:var(--bg-card);color:var(--fg);
-  font:inherit;font-size:0.95rem;transition:border-color 0.2s, box-shadow 0.2s;
+/* Ficha Bibliográfica / Card Tátil */
+.card {
+  background: var(--bg-card);
+  border: 1px solid var(--borda-suave);
+  border-radius: var(--radius-card);
+  padding: 24px; margin: 18px 0;
+  box-shadow: var(--sombra-card);
+  position: relative; overflow: hidden;
+  transition: transform var(--duracao-padrao) var(--calm-ease), box-shadow var(--duracao-padrao) var(--calm-ease);
 }
-.campo:focus{outline:none;border-color:var(--acento);box-shadow:0 0 0 3px rgba(157,113,232,0.2)}
-
-.toast{
-  position:fixed;top:20px;left:50%;transform:translateX(-50%);
-  background:#221E24;color:#FFFFFF;padding:12px 22px;border-radius:30px;
-  z-index:9999;max-width:90%;font-size:0.92rem;font-weight:600;
-  box-shadow:0 8px 30px rgba(0,0,0,0.3);animation:fadeUp 0.3s ease;
+.card:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--sombra-hover);
 }
-@keyframes fadeUp{from{opacity:0;transform:translate(-50%, 15px)} to{opacity:1;transform:translate(-50%, 0)}}
 
-/* Flashcard 3D */
-.flashcard-wrap{perspective:1000px;margin:24px 0}
-.flashcard{
-  background:var(--bg-card);border:2px solid var(--borda);border-radius:20px;
-  min-height:260px;padding:28px;box-shadow:var(--sombra);cursor:pointer;
-  display:flex;flex-direction:column;justify-content:center;align-items:center;
-  text-align:center;transition:transform 0.5s cubic-bezier(0.4, 0, 0.2, 1);
-  transform-style:preserve-3d;position:relative;user-select:none;
+/* Watermark de Psi para cards nobres */
+.card.destaque {
+  border-left: 5px solid var(--primaria);
+  background: linear-gradient(135deg, var(--bg-card) 70%, var(--bg-sepia) 100%);
 }
-.flashcard.virado{transform:rotateY(180deg)}
-.flashcard-lado{position:relative;backface-visibility:hidden;width:100%}
-.flashcard-verso{position:absolute;top:0;left:0;right:0;bottom:0;padding:28px;backface-visibility:hidden;transform:rotateY(180deg);display:flex;flex-direction:column;justify-content:center;align-items:center}
-
-/* Opções de quiz */
-.alt{
-  display:flex;align-items:center;gap:12px;padding:12px 16px;
-  border:1px solid var(--borda);border-radius:12px;margin:8px 0;
-  cursor:pointer;min-height:48px;background:var(--bg-card);
-  transition:all 0.15s ease;
+.card.destaque::after {
+  content: 'Ψ';
+  position: absolute; right: -10px; bottom: -20px;
+  font-family: var(--font-serif); font-size: 9rem; font-weight: 700;
+  color: var(--primaria); opacity: 0.035; pointer-events: none;
+  user-select: none; line-height: 1;
 }
-.alt:hover{border-color:var(--secundaria);background:var(--primaria-leve)}
-.alt:has(input:checked){border-color:var(--primaria);background:var(--lavanda);color:#221E24;font-weight:600}
 
-.res{border-radius:12px;padding:14px;margin:10px 0;background:var(--bg-card);border:1px solid var(--borda)}
-.res.ok{border-left:5px solid var(--verde);background:var(--verde-leve)}
-.res.erro{border-left:5px solid var(--vermelho);background:var(--vermelho-leve)}
-
-/* Chat do Professor */
-.chat-container{display:flex;flex-direction:column;gap:14px;margin:18px 0;max-height:480px;overflow-y:auto;padding-right:6px}
-.chat-msg{display:flex;gap:12px;max-width:88%}
-.chat-msg.prof{align-self:flex-start}
-.chat-msg.aluno{align-self:flex-end;flex-direction:row-reverse}
-.chat-avatar{width:36px;height:36px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:700;flex-shrink:0}
-.chat-msg.prof .chat-avatar{background:var(--primaria);color:#fff}
-.chat-msg.aluno .chat-avatar{background:var(--secundaria);color:#fff}
-.chat-bubble{padding:14px 18px;border-radius:18px;font-size:0.95rem;line-height:1.6}
-.chat-msg.prof .chat-bubble{background:var(--bg-card);border:1px solid var(--borda);border-top-left-radius:4px;box-shadow:var(--sombra-card)}
-.chat-msg.aluno .chat-bubble{background:var(--primaria);color:#FFFFFF;border-top-right-radius:4px}
-body.escuro .chat-msg.aluno .chat-bubble{background:var(--secundaria);color:#fff}
-
-/* Busca Modal */
-.modal-overlay{
-  position:fixed;top:0;left:0;right:0;bottom:0;
-  background:rgba(0,0,0,0.5);backdrop-filter:blur(4px);
-  z-index:999;display:flex;align-items:flex-start;justify-content:center;padding:60px 16px;
+/* Botões Ergonômicos */
+.btn {
+  display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+  background: var(--primaria); color: #FFF; border: 2px solid var(--primaria);
+  border-radius: 12px; padding: 11px 22px; font-family: var(--font-sans);
+  font-weight: 600; font-size: 0.96rem; cursor: pointer; min-height: 46px;
+  text-decoration: none; margin: 4px 6px 4px 0;
+  box-shadow: 0 2px 8px rgba(74, 21, 37, 0.16);
+  transition: all var(--duracao-rapida) var(--calm-ease);
 }
-.modal-content{background:var(--bg-card);border:1px solid var(--borda);border-radius:20px;max-width:640px;width:100%;max-height:80vh;display:flex;flex-direction:column;box-shadow:var(--sombra)}
-.modal-header{padding:16px 20px;border-bottom:1px solid var(--borda);display:flex;align-items:center;gap:12px}
-.modal-body{padding:16px 20px;overflow-y:auto;flex:1}
+.btn:hover {
+  background: var(--primaria-hover); border-color: var(--primaria-hover);
+  text-decoration: none; transform: translateY(-1.5px);
+  box-shadow: 0 4px 12px rgba(74, 21, 37, 0.24);
+}
+.btn.sec {
+  background: transparent; color: var(--primaria);
+  border-color: var(--borda-suave); box-shadow: none;
+}
+.btn.sec:hover {
+  background: var(--primaria-tint); border-color: var(--primaria);
+}
+.btn.sm {
+  padding: 6px 14px; font-size: 0.86rem; min-height: 36px; border-radius: 8px;
+}
 
-/* Anotações Drawer */
-.notes-box{background:var(--bg-subtil);border:1px solid var(--borda);border-radius:14px;padding:16px;margin:16px 0}
-.notes-box textarea{min-height:100px;resize:vertical}
+/* Tags de Fichamento */
+.tag {
+  display: inline-flex; align-items: center; gap: 5px;
+  background: var(--bg-sepia); color: var(--fg-base);
+  padding: 4px 12px; border-radius: var(--radius-pill);
+  font-size: 0.78rem; font-weight: 700; text-transform: uppercase;
+  letter-spacing: 0.04em; border: 1px solid var(--borda-suave);
+}
+.tag.concluido { background: var(--salvia-tint); color: var(--salvia); border-color: transparent; }
+.tag.pendente { background: var(--primaria-tint); color: var(--primaria); border-color: transparent; }
 
-/* Leitor de voz */
-.tts-bar{display:inline-flex;align-items:center;gap:8px;background:var(--bg-subtil);padding:6px 12px;border-radius:10px;font-size:0.88rem;margin:10px 0}
+/* Barra de Progresso Suave */
+.barra {
+  height: 7px; background: var(--borda-suave);
+  border-radius: var(--radius-pill); overflow: hidden; margin: 10px 0;
+}
+.barra > div {
+  height: 100%; background: var(--salvia);
+  transition: width 0.5s var(--calm-ease);
+}
+
+/* Grades Táteis */
+.grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 18px; margin: 18px 0; }
+.grid-stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); gap: 14px; margin: 16px 0; }
+
+.stat-box {
+  background: var(--bg-card); border: 1px solid var(--borda-suave);
+  border-radius: var(--radius-card); padding: 18px; text-align: center;
+  box-shadow: var(--sombra-card);
+}
+.stat-box .num {
+  font-family: var(--font-serif); font-size: 1.85rem; font-weight: 700;
+  color: var(--primaria); display: block; line-height: 1.15;
+}
+.stat-box .rotulo {
+  font-size: 0.8rem; font-weight: 700; color: var(--fg-muted);
+  text-transform: uppercase; letter-spacing: 0.05em; margin-top: 4px; display: block;
+}
+
+/* ==========================================================================
+   SELOS CONCEITUAIS DOS 12 EIXOS TEMÁTICOS (MÓDULOS)
+   ========================================================================== */
+.modulo-card {
+  position: relative; border-radius: var(--radius-card);
+  background: var(--bg-card); border: 1px solid var(--borda-suave);
+  padding: 24px; box-shadow: var(--sombra-card);
+  transition: all var(--duracao-padrao) var(--calm-ease);
+  overflow: hidden;
+}
+.modulo-card:hover { transform: translateY(-3px); box-shadow: var(--sombra-hover); }
+
+/* Selos conceituais táteis no topo do card */
+.modulo-card::before {
+  content: ''; position: absolute; top: 0; left: 0; right: 0; height: 4px;
+  background: var(--borda-suave);
+}
+.modulo-card[data-mod="1"]::before { background: linear-gradient(90deg, var(--primaria), var(--secundaria)); }
+.modulo-card[data-mod="2"]::before { background: var(--ambar); } /* História */
+.modulo-card[data-mod="3"]::before { background: var(--primaria); } /* Psicanálise e Abordagens */
+.modulo-card[data-mod="4"]::before { background: linear-gradient(90deg, #9D71E8, #3A7356); } /* Neurociências */
+.modulo-card[data-mod="5"]::before { background: var(--secundaria); } /* Processos Básicos */
+.modulo-card[data-mod="6"]::before { background: #2F6F9F; } /* Behaviorismo/Aprendizagem */
+.modulo-card[data-mod="7"]::before { background: var(--salvia); } /* Desenvolvimento */
+.modulo-card[data-mod="8"]::before { background: #D97736; } /* Social */
+.modulo-card[data-mod="9"]::before { background: #8E4A49; } /* Personalidade */
+.modulo-card[data-mod="10"]::before { background: #45625D; } /* Metodologia Científica */
+.modulo-card[data-mod="11"]::before { background: var(--ambar); } /* Ética CFP */
+.modulo-card[data-mod="12"]::before { background: var(--terracota); } /* Psicopatologia */
+
+/* ==========================================================================
+   FLASHCARD 3D CLÁSSICO (REPETIÇÃO ESPAÇADA)
+   ========================================================================== */
+.flashcard-wrap { perspective: 1200px; margin: 28px 0; }
+.flashcard {
+  background: var(--bg-card); border: 2px solid var(--borda-suave);
+  border-radius: 20px; min-height: 280px; padding: 36px 30px;
+  box-shadow: var(--sombra-hover); cursor: pointer;
+  display: flex; flex-direction: column; justify-content: center; align-items: center;
+  text-align: center; transition: transform 0.6s var(--calm-ease);
+  transform-style: preserve-3d; position: relative; user-select: none;
+}
+.flashcard.virado { transform: rotateY(180deg); }
+.flashcard-lado { position: relative; backface-visibility: hidden; width: 100%; }
+.flashcard-verso {
+  position: absolute; top: 0; left: 0; right: 0; bottom: 0; padding: 36px 30px;
+  backface-visibility: hidden; transform: rotateY(180deg);
+  display: flex; flex-direction: column; justify-content: center; align-items: center;
+  background: var(--bg-fichamento); border-radius: 18px;
+}
+.flashcard h2 { font-family: var(--font-serif); border: none; padding: 0; }
+
+/* ==========================================================================
+   MODO FOCO ZEN DE LEITURA (AULA SEM DISTRAÇÕES)
+   ========================================================================== */
+body.modo-zen {
+  padding-left: 0 !important;
+  background-color: #FAF8F5;
+}
+body.escuro.modo-zen { background-color: #111014; }
+
+body.modo-zen .app-header,
+body.modo-zen nav.inferior {
+  display: none !important;
+}
+body.modo-zen .wrap {
+  max-width: 760px; padding: 50px 24px;
+}
+.btn-zen-toggle {
+  position: fixed; right: 24px; bottom: 24px; z-index: 90;
+  box-shadow: var(--sombra-flutuante);
+}
+
+/* ==========================================================================
+   O PROFESSOR DIGITAL & BANNER ÉTICO CFP / CVV 188
+   ========================================================================== */
+.chat-container {
+  display: flex; flex-direction: column; gap: 16px;
+  margin: 20px 0; max-height: 520px; overflow-y: auto; padding-right: 8px;
+}
+.chat-msg { display: flex; gap: 14px; max-width: 90%; }
+.chat-msg.prof { align-self: flex-start; }
+.chat-msg.aluno { align-self: flex-end; flex-direction: row-reverse; }
+
+.chat-avatar {
+  width: 40px; height: 40px; border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-family: var(--font-serif); font-size: 1.15rem; font-weight: 700; flex-shrink: 0;
+}
+.chat-msg.prof .chat-avatar {
+  background: var(--primaria); color: #FFF;
+  box-shadow: 0 2px 8px rgba(74, 21, 37, 0.25);
+}
+.chat-msg.aluno .chat-avatar { background: var(--secundaria); color: #FFF; }
+
+.chat-bubble {
+  padding: 16px 22px; border-radius: 20px;
+  font-size: 0.98rem; line-height: 1.68;
+}
+.chat-msg.prof .chat-bubble {
+  background: var(--bg-card); border: 1px solid var(--borda-suave);
+  border-top-left-radius: 4px; box-shadow: var(--sombra-card);
+}
+.chat-msg.aluno .chat-bubble {
+  background: var(--primaria); color: #FFFFFF;
+  border-top-right-radius: 4px;
+}
+body.escuro .chat-msg.aluno .chat-bubble { background: var(--secundaria); color: #FFF; }
+
+/* Banner Ético Permanente */
+.banner-etico {
+  background: var(--bg-sepia); border: 1px solid var(--borda-suave);
+  border-radius: 12px; padding: 12px 18px; margin-top: 14px;
+  font-size: 0.84rem; display: flex; align-items: center; gap: 12px;
+  color: var(--fg-muted);
+}
+.banner-etico strong { color: var(--primaria); }
+
+/* Inputs e Formulários */
+.campo {
+  width: 100%; padding: 12px 16px; border-radius: 12px;
+  border: 1px solid var(--borda-suave); background: var(--bg-card); color: var(--fg-base);
+  font: inherit; font-size: 0.96rem; transition: all var(--duracao-rapida) var(--calm-ease);
+}
+.campo:focus {
+  outline: none; border-color: var(--primaria);
+  box-shadow: 0 0 0 3px var(--primaria-tint);
+}
+
+.toast {
+  position: fixed; top: 24px; left: 50%; transform: translateX(-50%);
+  background: #242124; color: #FFFFFF; padding: 12px 24px; border-radius: 30px;
+  z-index: 9999; max-width: 90%; font-size: 0.92rem; font-weight: 600;
+  box-shadow: var(--sombra-flutuante); animation: fadeUp 0.3s var(--calm-ease);
+}
+@keyframes fadeUp {
+  from { opacity: 0; transform: translate(-50%, 15px); }
+  to { opacity: 1; transform: translate(-50%, 0); }
+}
+
+/* Modal de Busca Rápida */
+.modal-overlay {
+  position: fixed; top: 0; left: 0; right: 0; bottom: 0;
+  background: rgba(19, 18, 23, 0.6); backdrop-filter: blur(8px);
+  z-index: 999; display: flex; align-items: flex-start; justify-content: center; padding: 60px 16px;
+}
+.modal-content {
+  background: var(--bg-card); border: 1px solid var(--borda-suave);
+  border-radius: 20px; max-width: 660px; width: 100%; max-height: 82vh;
+  display: flex; flex-direction: column; box-shadow: var(--sombra-flutuante);
+}
+.modal-header { padding: 18px 24px; border-bottom: 1px solid var(--borda-suave); display: flex; align-items: center; gap: 14px; }
+.modal-body { padding: 20px 24px; overflow-y: auto; flex: 1; }
 </style>
 </head>
 <body>
 <div id="aviso" class="toast" role="status" aria-live="polite" hidden></div>
 
-<!-- Top Header -->
+<!-- Top Header com Identidade Psi e Pomodoro com Respiração -->
 <header class="app-header" id="header" hidden>
   <a href="#/inicio" class="header-brand">
-    <div class="logo-icon">ψ</div>
+    <div class="psi-emblem">Ψ</div>
     <span>PsicoBase</span>
   </a>
+  
   <div class="header-actions">
     <!-- Streak -->
-    <div class="btn-header" title="Sequência diária de estudo" id="streak-badge">🔥 0 dias</div>
+    <div class="btn-header" title="Sequência de dias dedicados ao estudo" id="streak-badge">🔥 0 dias</div>
     
-    <!-- Pomodoro -->
-    <div class="pomo-widget" id="pomo-box" title="Pomodoro de Estudo">
-      <span id="pomo-icon">⏱️</span>
+    <!-- Pomodoro de Foco -->
+    <div class="pomo-pill" id="pomo-box" title="Pomodoro de Estudo & Foco">
+      <span class="pomo-breath-circle"></span>
       <span id="pomo-display">25:00</span>
-      <button class="pomo-btn" id="pomo-toggle" onclick="togglePomodoro()" title="Iniciar/Pausar">▶</button>
-      <button class="pomo-btn" id="pomo-reset" onclick="resetPomodoro()" title="Reiniciar">↺</button>
+      <button class="btn-icon-subtle" id="pomo-toggle" onclick="togglePomodoro()" title="Iniciar/Pausar">▶</button>
+      <button class="btn-icon-subtle" id="pomo-reset" onclick="resetPomodoro()" title="Reiniciar">↺</button>
     </div>
     
-    <!-- Busca Rápida -->
-    <button class="btn-header" onclick="abrirBuscaModal()" title="Busca Rápida (Ctrl+K)">
-      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+    <!-- Busca Rápida (Ctrl+K) -->
+    <button class="btn-header" onclick="abrirBuscaModal()" title="Busca Rápida de Aulas e Termos (Ctrl+K)">
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
       <span style="display:none" class="d-md-inline">Buscar</span>
     </button>
 
-    <!-- Tema -->
-    <button class="btn-header" onclick="alternarTema()" title="Alternar Modo Escuro / Claro">
+    <!-- Alternador de Tema -->
+    <button class="btn-header" onclick="alternarTema()" title="Alternar Modo Noturno / Leitura em Linho">
       <span id="tema-icon">🌙</span>
     </button>
   </div>
 </header>
 
-<!-- Navegação Principal -->
+<!-- Navegação Principal com Estética Editorial -->
 <nav class="inferior" id="nav" aria-label="Navegação principal" hidden>
-  <div class="nav-header" style="display:none">
+  <div class="nav-header-desktop" style="display:none">
     <div class="header-brand">
-      <div class="logo-icon">ψ</div>
+      <div class="psi-emblem">Ψ</div>
       <span>PsicoBase</span>
     </div>
   </div>
@@ -357,12 +610,12 @@ body.escuro .chat-msg.aluno .chat-bubble{background:var(--secundaria);color:#fff
 <div id="modal-busca" class="modal-overlay" style="display:none" onclick="if(event.target===this) fecharBuscaModal()">
   <div class="modal-content">
     <div class="modal-header">
-      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
-      <input id="input-busca-modal" class="campo" type="search" placeholder="Buscar qualquer aula, termo ou autor..." oninput="executarBuscaModal(this.value)" autocomplete="off">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+      <input id="input-busca-modal" class="campo" type="search" placeholder="Pesquisar em todas as 47 aulas, autores e termos..." oninput="executarBuscaModal(this.value)" autocomplete="off">
       <button class="btn sec sm" onclick="fecharBuscaModal()">✕</button>
     </div>
     <div id="modal-busca-resultados" class="modal-body">
-      <p class="muted">Digite uma palavra-chave para encontrar aulas e conceitos em toda a PsicoBase.</p>
+      <p class="muted">Digite uma palavra-chave para encontrar conteúdos em toda a PsicoBase.</p>
     </div>
   </div>
 </div>
@@ -397,6 +650,7 @@ let obDados={nivel:'',objetivo:'',tempo:'',preferencias:[],apelido:''};
 let filaRev=null;
 let revIndice=0;
 let revVerso=false;
+let modoZenAtivo=false;
 
 /* Pomodoro Timer */
 let pomoTempo=25*60;
@@ -435,6 +689,13 @@ function alternarTema(){
 }
 window.alternarTema = alternarTema;
 
+function alternarModoZen(){
+ modoZenAtivo = !modoZenAtivo;
+ document.body.classList.toggle('modo-zen', modoZenAtivo);
+ aviso(modoZenAtivo ? 'Modo Leitura Zen ativado 🌿' : 'Modo Leitura Zen desativado');
+}
+window.alternarModoZen = alternarModoZen;
+
 function aplicarVisual(){
  document.body.classList.toggle('escuro', estado.tema==='escuro');
  document.body.classList.toggle('grande', estado.fonte==='grande');
@@ -448,7 +709,6 @@ function calcularStreak(){
  let streak=0;
  let atual=new Date();
  let check=dataISO(atual);
- // Se não estudou hoje, checa se estudou ontem
  if(!dias.includes(check)){
    atual.setDate(atual.getDate()-1);
    check=dataISO(atual);
@@ -479,8 +739,10 @@ function formatarTempoPomo(s){
 function togglePomodoro(){
  pomoAtivo=!pomoAtivo;
  const btn=$('#pomo-toggle');
+ const box=$('#pomo-box');
  if(pomoAtivo){
    if(btn) btn.textContent='⏸';
+   if(box) box.classList.add('ativo');
    pomoInterval=setInterval(()=>{
      if(pomoTempo>0){
        pomoTempo--;
@@ -489,7 +751,8 @@ function togglePomodoro(){
        clearInterval(pomoInterval);
        pomoAtivo=false;
        if(btn) btn.textContent='▶';
-       aviso('🎉 Parabéns! Ciclo Pomodoro concluído (+25 min registrados).');
+       if(box) box.classList.remove('ativo');
+       aviso('🎉 Parabéns! Ciclo Pomodoro concluído (+25 min de foco registrados).');
        const k=dataISO();
        estado.minPorDia[k]=(estado.minPorDia[k]||0)+25;
        salvar();
@@ -498,6 +761,7 @@ function togglePomodoro(){
    },1000);
  }else{
    if(btn) btn.textContent='▶';
+   if(box) box.classList.remove('ativo');
    clearInterval(pomoInterval);
  }
 }
@@ -509,6 +773,7 @@ function resetPomodoro(){
  pomoTempo=25*60;
  const disp=$('#pomo-display'); if(disp) disp.textContent='25:00';
  const btn=$('#pomo-toggle'); if(btn) btn.textContent='▶';
+ const box=$('#pomo-box'); if(box) box.classList.remove('ativo');
 }
 window.resetPomodoro = resetPomodoro;
 
@@ -552,27 +817,27 @@ function responderCartao(id,nivel){
  salvar();
 }
 
-/* ==================== LEITOR DE VOZ (TTS) ==================== */
+/* ==================== LEITOR DE VOZ (PODCAST ZEN) ==================== */
 let vozFalando=false;
 function falarTexto(texto){
  if(!('speechSynthesis' in window)) return aviso('Síntese de voz não suportada pelo seu navegador.');
  if(vozFalando){
    window.speechSynthesis.cancel();
    vozFalando=false;
-   const btn=$('#btn-audio-aula'); if(btn) btn.innerHTML='🔊 Ouvir Aula';
+   const btn=$('#btn-audio-aula'); if(btn) btn.innerHTML='🔊 Ouvir Aula (Podcast)';
    return;
  }
  window.speechSynthesis.cancel();
  const utt=new SpeechSynthesisUtterance(texto);
  utt.lang='pt-BR';
- utt.rate=1.0;
+ utt.rate=0.95; /* Leitura cadenciada e acolhedora */
  utt.onend=()=>{
    vozFalando=false;
-   const btn=$('#btn-audio-aula'); if(btn) btn.innerHTML='🔊 Ouvir Aula';
+   const btn=$('#btn-audio-aula'); if(btn) btn.innerHTML='🔊 Ouvir Aula (Podcast)';
  };
  vozFalando=true;
  window.speechSynthesis.speak(utt);
- const btn=$('#btn-audio-aula'); if(btn) btn.innerHTML='⏹ Parar Áudio';
+ const btn=$('#btn-audio-aula'); if(btn) btn.innerHTML='⏹ Pausar Áudio';
 }
 window.falarTexto = falarTexto;
 
@@ -582,7 +847,7 @@ function salvarAnotacaoAula(aulaId, texto){
  estado.anotacoes[aulaId]=texto;
  salvar();
  const tag=$('#status-anotacao');
- if(tag){ tag.textContent='Salvo ✓'; setTimeout(()=>{ tag.textContent=''; },2000); }
+ if(tag){ tag.textContent='Fichamento salvo ✓'; setTimeout(()=>{ tag.textContent=''; },2000); }
 }
 window.salvarAnotacaoAula = salvarAnotacaoAula;
 
@@ -614,11 +879,11 @@ function proximaAula(){
 const CRISE_TERMOS_LISTA=['suicid','me matar','quero morrer','nao quero viver','não quero viver','acabar com a minha vida','automutil','me cortar','me machucar','autolesao'];
 const DIAG_TERMOS_LISTA=['tenho depressao','tenho ansiedade','tenho transtorno','eu tenho tdah','sera que eu tenho','diagnostica','diagnostico para mim','meu diagnostico','interprete meu teste','qual remedio','quantos mg'];
 
-const RESPOSTA_CRISE_TXT="Sinto muito que você esteja passando por um momento delicado. Como Professor Virtual acadêmico, não posso oferecer atendimento psicológico ou emergencial. "
-+"Por favor, busque acolhimento agora mesmo: Ligue 188 (CVV - Centro de Valorização da Vida, gratuito 24h) ou em caso de risco iminente, 192 (SAMU).";
+const RESPOSTA_CRISE_TXT="Sinto muito que você esteja passando por um momento tão delicado. Como Professor Virtual acadêmico, não tenho autorização para oferecer atendimento psicológico ou emergencial. "
++"Por favor, busque acolhimento humano agora mesmo: Ligue 188 (CVV - Centro de Valorização da Vida, gratuito 24h) ou em caso de risco iminente, ligue 192 (SAMU).";
 
-const RESPOSTA_DIAG_TXT="De acordo com o Código de Ética do Psicólogo (CFP), diagnósticos clínicos e prescrições terapêuticas exigem formação profissional e acolhimento presencial/remoto por psicólogo com CRP ativo. "
-+"Meu papel é exclusivamente didático. Posso explicar como o construto é definido teoricamente nos manuais (CID-11 / DSM-5) para fins de estudo acadêmico.";
+const RESPOSTA_DIAG_TXT="De acordo com o Código de Ética Profissional do Psicólogo (CFP), avaliações diagnósticas e prescrições terapêuticas exigem formação profissional e acolhimento presencial/remoto por psicólogo com registro ativo no CRP. "
++"Meu papel é exclusivamente didático. Posso explicar como a literatura científica aborda o tema de forma conceitual para fins de estudo acadêmico.";
 
 async function chamarProfessorIA(mensagem, contextoAula){
  const mNorm=mensagem.toLowerCase();
@@ -645,15 +910,14 @@ async function chamarProfessorIA(mensagem, contextoAula){
    if(mNorm.includes(a.titulo.toLowerCase()) || (a.objetivos||[]).some(o=>mNorm.includes(o.toLowerCase()))){
      const resumoTxt=(a.resumo||[]).join(' ');
      return {
-       resposta:"Olá! Na aula **"+a.titulo+"**, estudamos exatamente esse tema.\n\n"
+       resposta:"Olá! Na aula **"+a.titulo+"**, investigamos exatamente essa temática.\n\n"
          +"📌 **Conceito Central:** "+(resumoTxt||a.secoes[0].p[0])+"\n\n"
-         +"💡 **Dica de Estudo:** Revise os objetivos da aula e observe como esse conceito é cobrado nas questões de fixação.",
+         +"💡 **Reflexão Socrática:** Como você explicaria a distinção entre a definição popular desse termo e a sua formulação científica?",
        fontes:['Aula: '+a.titulo, a.disciplina]
      };
    }
  }
 
- // 3. Resposta Socrática Padrão
  return {
    resposta:"Excelente reflexão acadêmica! Para compreendermos esse aspecto na Psicologia, é crucial delimitarmos sob qual matriz epistemológica estamos trabalhando (Comportamental, Cognitiva, Psicanalítica ou Humanista).\n\n"
      +"Sugiro que você explore as aulas correspondentes na aba **Aprender** e consulte os termos fundamentais na **Biblioteca** para estruturar seu fichamento.",
@@ -661,36 +925,37 @@ async function chamarProfessorIA(mensagem, contextoAula){
  };
 }
 
-/* ==================== VIEWS ==================== */
+/* ==================== VIEWS (DESIGN EDITORIAL) ==================== */
 
 /* View: Bem-Vindo */
 function viewBemVindo(){
  const pct=Math.round((obPasso-1)/5*100);
  let corpo='';
  if(obPasso===1){
-  corpo='<p style="font-size:1.1rem">Bem-vindo(a) à <strong>PsicoBase</strong>, sua plataforma interativa para aprender, revisar e dominar os fundamentos da Psicologia.</p>'
-   +'<div class="card destaque"><p>Aqui você estuda com conteúdos estruturados, flashcards com repetição espaçada, caderno de anotações e um <strong>Professor Digital</strong> para tirar dúvidas 24 horas por dia.</p></div>'
-   +'<button class="btn" onclick="proximoOnboarding(1)">Começar Jornada →</button>';
+  corpo='<p style="font-size:1.15rem;font-family:var(--font-serif);color:var(--primaria);line-height:1.7">'
+   +'O espaço onde a mente humana é estudada com profundidade, método e acolhimento.</p>'
+   +'<div class="card destaque"><p>Sua formação e curiosidade científica guiadas por conteúdos estruturados em 12 eixos temáticos, fichamento de pesquisa, repetição espaçada e tutoria socrática.</p></div>'
+   +'<button class="btn" onclick="proximoOnboarding(1)">Iniciar Jornada Intelectual →</button>';
  }else if(obPasso===2){
-  corpo='<p>Qual é o seu nível atual de conhecimento?</p>'
+  corpo='<p>Qual é o seu nível atual de intimidade com a Psicologia?</p>'
    +'<div class="card">'+Object.entries(NIVEIS).map(([k,v])=>'<label class="alt"><input type="radio" name="ob-nivel" value="'+k+'"> <span>'+v+'</span></label>').join('')+'</div>'
    +'<button class="btn" onclick="proximoOnboarding(2)">Continuar →</button>';
  }else if(obPasso===3){
-  corpo='<p>Qual é o seu objetivo principal?</p>'
+  corpo='<p>Qual é o seu objetivo de estudo primordial?</p>'
    +'<div class="card">'+Object.entries(OBJETIVOS).map(([k,v])=>'<label class="alt"><input type="radio" name="ob-obj" value="'+k+'"> <span>'+v+'</span></label>').join('')+'</div>'
    +'<button class="btn" onclick="proximoOnboarding(3)">Continuar →</button>';
  }else if(obPasso===4){
-  corpo='<p>Quanto tempo você pretende se dedicar por dia?</p>'
+  corpo='<p>Qual tempo diário você deseja reservar para suas sessões de leitura e foco?</p>'
    +'<div class="card">'+Object.entries(TEMPOS).map(([k,v])=>'<label class="alt"><input type="radio" name="ob-tempo" value="'+k+'"> <span>'+v+'</span></label>').join('')+'</div>'
    +'<button class="btn" onclick="proximoOnboarding(4)">Continuar →</button>';
  }else if(obPasso===5){
-  corpo='<p>Como prefere que o Professor Digital te chame?</p>'
-   +'<div class="card"><input id="ob-nome" class="campo" placeholder="Seu nome ou apelido (opcional)" maxlength="40"></div>'
-   +'<button class="btn" onclick="proximoOnboarding(5)">Concluir e Estudar →</button>';
+  corpo='<p>Como prefere ser chamado(a) durante as tutorias?</p>'
+   +'<div class="card"><input id="ob-nome" class="campo" placeholder="Seu nome ou apelido acadêmico" maxlength="40"></div>'
+   +'<button class="btn" onclick="proximoOnboarding(5)">Entrar na PsicoBase →</button>';
  }
  return '<div class="barra"><div style="width:'+pct+'%"></div></div>'
-  +'<p class="muted">Passo '+obPasso+' de 5</p>'
-  +'<h1>Configuração Inicial</h1>'+corpo;
+  +'<p class="muted">Configuração de Percurso · Passo '+obPasso+' de 5</p>'
+  +'<h1>Boas-vindas à PsicoBase</h1>'+corpo;
 }
 
 window.proximoOnboarding = function(etapa){
@@ -707,7 +972,7 @@ window.proximoOnboarding = function(etapa){
  }
  if(etapa===4){
    const sel=$('input[name="ob-tempo"]:checked');
-   if(!sel) return aviso('Escolha sua meta de tempo.');
+   if(!sel) return aviso('Escolha sua meta diária de foco.');
    obDados.tempo=sel.value; obPasso=5; render(); return;
  }
  if(etapa===5){
@@ -720,7 +985,7 @@ window.proximoOnboarding = function(etapa){
  }
 };
 
-/* View: Início */
+/* View: Início (Editorial Humanista) */
 function viewInicio(){
  const p=estado.perfil||{};
  const st=estatisticas();
@@ -730,106 +995,111 @@ function viewInicio(){
  const nome=p.apelido?', '+esc(p.apelido):'';
  
  return ''
- +'<div style="margin-bottom:24px">'
-  +'<h1 style="margin-bottom:4px">'+sauda+nome+'! 👋</h1>'
-  +'<p class="muted">Pronto para aprofundar seu conhecimento na ciência da mente e do comportamento?</p>'
+ +'<div style="margin-bottom:28px">'
+  +'<h1 style="margin-bottom:4px;font-family:var(--font-serif)">'+sauda+nome+'.</h1>'
+  +'<p class="muted" style="font-size:1.1rem;font-family:var(--font-serif);font-style:italic">'
+   +'"O espaço onde a mente humana é estudada com profundidade, método e acolhimento."'
+  +'</p>'
  +'</div>'
  
- // Card de Continuação Rápida
+ // Card Destaque: Continuar Estudos
  +'<div class="card destaque">'
-  +'<div style="display:flex;justify-content:space-between;align-items:flex-start;flex-wrap:wrap;gap:8px">'
+  +'<div style="display:flex;justify-content:space-between;align-items:flex-start;flex-wrap:wrap;gap:12px">'
    +'<div>'
-    +'<span class="tag pendente">Continuar Aula</span>'
-    +'<h2 style="margin:6px 0">'+esc(aulaObj.titulo)+'</h2>'
+    +'<span class="tag pendente">Sessão em Andamento</span>'
+    +'<h2 style="margin:8px 0;border:none;padding:0">'+esc(aulaObj.titulo)+'</h2>'
     +'<p class="muted" style="margin:0">'+esc(aulaObj.disciplina)+' · Estimado: '+aulaObj.tempo+' min</p>'
    +'</div>'
-   +'<a href="#/aula/'+aulaObj.id+'" class="btn">Continuar Estudos →</a>'
+   +'<a href="#/aula/'+aulaObj.id+'" class="btn">Retomar Fichamento →</a>'
   +'</div>'
  +'</div>'
 
- // Métricas Rápidas
+ // Métricas Táteis
  +'<div class="grid-stats">'
-  +'<div class="stat-box"><span class="num">'+st.concl+'/'+st.totalAulas+'</span><span class="rotulo">Aulas Feitas</span></div>'
+  +'<div class="stat-box"><span class="num">'+st.concl+'/'+st.totalAulas+'</span><span class="rotulo">Aulas Lidas</span></div>'
   +'<div class="stat-box"><span class="num">'+st.pend+'</span><span class="rotulo">Revisões Hoje</span></div>'
-  +'<div class="stat-box"><span class="num">'+st.minutos+'m</span><span class="rotulo">Tempo Total</span></div>'
-  +'<div class="stat-box"><span class="num">'+(st.pct!==null?st.pct+'%':'-')+'</span><span class="rotulo">Aproveitamento</span></div>'
+  +'<div class="stat-box"><span class="num">'+st.minutos+'m</span><span class="rotulo">Foco Acumulado</span></div>'
+  +'<div class="stat-box"><span class="num">'+(st.pct!==null?st.pct+'%':'-')+'</span><span class="rotulo">Retenção</span></div>'
  +'</div>'
 
- // Ações Rápidas
- +'<h2>Acesso Rápido</h2>'
+ // Rotas de Acesso Rápido
+ +'<h2>Acesso Rápido ao Conhecimento</h2>'
  +'<div class="grid">'
-  +'<a href="#/professor" class="card" style="display:flex;align-items:center;gap:14px;color:inherit;text-decoration:none">'
-   +'<div style="font-size:2rem;background:var(--lavanda);width:52px;height:52px;border-radius:14px;display:flex;align-items:center;justify-content:center">🤖</div>'
-   +'<div><strong>Professor Virtual</strong><p class="muted" style="margin:2px 0">Tire dúvidas e debata casos clínicos</p></div>'
+  +'<a href="#/professor" class="card" style="display:flex;align-items:center;gap:16px;color:inherit;text-decoration:none">'
+   +'<div style="font-size:1.8rem;background:var(--primaria-tint);color:var(--primaria);width:54px;height:54px;border-radius:14px;display:flex;align-items:center;justify-content:center;font-family:var(--font-serif);font-weight:700">Ψ</div>'
+   +'<div><strong>Professor Digital</strong><p class="muted" style="margin:2px 0">Tire dúvidas com escuta socrática e casos clínicos</p></div>'
   +'</a>'
-  +'<a href="#/revisar" class="card" style="display:flex;align-items:center;gap:14px;color:inherit;text-decoration:none">'
-   +'<div style="font-size:2rem;background:var(--lavanda);width:52px;height:52px;border-radius:14px;display:flex;align-items:center;justify-content:center">🧠</div>'
-   +'<div><strong>Flashcards SRS</strong><p class="muted" style="margin:2px 0">'+st.pend+' cartões prontos para revisar</p></div>'
+  +'<a href="#/revisar" class="card" style="display:flex;align-items:center;gap:16px;color:inherit;text-decoration:none">'
+   +'<div style="font-size:1.8rem;background:var(--salvia-tint);color:var(--salvia);width:54px;height:54px;border-radius:14px;display:flex;align-items:center;justify-content:center">📇</div>'
+   +'<div><strong>Fichamento & Flashcards</strong><p class="muted" style="margin:2px 0">'+st.pend+' fichas agendadas pelo algoritmo SRS</p></div>'
   +'</a>'
-  +'<a href="#/aprender" class="card" style="display:flex;align-items:center;gap:14px;color:inherit;text-decoration:none">'
-   +'<div style="font-size:2rem;background:var(--lavanda);width:52px;height:52px;border-radius:14px;display:flex;align-items:center;justify-content:center">📚</div>'
-   +'<div><strong>Todos os Módulos</strong><p class="muted" style="margin:2px 0">12 módulos da graduação</p></div>'
+  +'<a href="#/aprender" class="card" style="display:flex;align-items:center;gap:16px;color:inherit;text-decoration:none">'
+   +'<div style="font-size:1.8rem;background:var(--secundaria-tint);color:var(--secundaria);width:54px;height:54px;border-radius:14px;display:flex;align-items:center;justify-content:center">📚</div>'
+   +'<div><strong>12 Eixos Temáticos</strong><p class="muted" style="margin:2px 0">Trilha curricular completa com 47 aulas</p></div>'
   +'</a>'
-  +'<a href="#/biblioteca" class="card" style="display:flex;align-items:center;gap:14px;color:inherit;text-decoration:none">'
-   +'<div style="font-size:2rem;background:var(--lavanda);width:52px;height:52px;border-radius:14px;display:flex;align-items:center;justify-content:center">📖</div>'
-   +'<div><strong>Biblioteca & Termos</strong><p class="muted" style="margin:2px 0">Glossário e suas anotações</p></div>'
+  +'<a href="#/biblioteca" class="card" style="display:flex;align-items:center;gap:16px;color:inherit;text-decoration:none">'
+   +'<div style="font-size:1.8rem;background:var(--ambar-tint);color:var(--ambar);width:54px;height:54px;border-radius:14px;display:flex;align-items:center;justify-content:center">📖</div>'
+   +'<div><strong>Biblioteca & Glossário</strong><p class="muted" style="margin:2px 0">Catálogo de termos e seu caderno pessoal</p></div>'
   +'</a>'
  +'</div>';
 }
 
-/* View: Aprender (Módulos) */
+/* View: Aprender (12 Eixos com Selos Conceituais) */
 function viewAprender(){
  const modulosHtml=MODULOS.map(m=>{
   const aulas=Object.entries(AULAS).filter(([id,a])=>a.modulo===m.id);
   const feitas=aulas.filter(([id])=>estado.aulasConcluidas[id]).length;
   const pct=aulas.length?Math.round((feitas/aulas.length)*100):0;
   return ''
-  +'<div class="card">'
+  +'<div class="modulo-card" data-mod="'+m.id+'">'
    +'<div style="display:flex;justify-content:space-between;align-items:flex-start">'
     +'<div>'
-     +'<span class="tag">Módulo '+m.id+'</span>'
-     +'<h2 style="margin:6px 0"><a href="#/modulo/'+m.id+'">'+esc(m.titulo)+'</a></h2>'
+     +'<span class="tag">Eixo '+m.id+'</span>'
+     +'<h2 style="margin:8px 0;border:none;padding:0"><a href="#/modulo/'+m.id+'">'+esc(m.titulo)+'</a></h2>'
      +'<p class="muted" style="margin-bottom:8px">'+esc(m.desc)+'</p>'
     +'</div>'
     +'<span class="tag '+(pct===100?'concluido':'')+'">'+pct+'%</span>'
    +'</div>'
    +'<div class="barra"><div style="width:'+pct+'%"></div></div>'
-   +'<div style="display:flex;justify-content:space-between;align-items:center;margin-top:10px">'
-    +'<span class="muted" style="font-size:0.85rem">'+aulas.length+' aulas · '+feitas+' concluídas</span>'
-    +'<a href="#/modulo/'+m.id+'" class="btn sec sm">Ver Aulas →</a>'
+   +'<div style="display:flex;justify-content:space-between;align-items:center;margin-top:12px">'
+    +'<span class="muted" style="font-size:0.86rem">'+aulas.length+' aulas · '+feitas+' concluídas</span>'
+    +'<a href="#/modulo/'+m.id+'" class="btn sec sm">Abrir Eixo →</a>'
    +'</div>'
   +'</div>';
  }).join('');
 
- return '<h1>Trilha de Aprendizado</h1><p class="muted">Os 12 eixos fundamentais da formação acadêmica em Psicologia.</p>'+modulosHtml;
+ return ''
+ +'<h1>Eixos Curriculares de Psicologia</h1>'
+ +'<p class="muted">Os 12 módulos estruturantes da formação acadêmica: da epistemologia filosófica à prática biopsicossocial e ética profissional.</p>'
+ +'<div class="grid">'+modulosHtml+'</div>';
 }
 
 /* View: Módulo */
 function viewModulo(n){
  const m=MODULOS.find(x=>String(x.id)===String(n));
- if(!m) return '<h1>Módulo não encontrado</h1><p><a href="#/aprender">Voltar</a></p>';
+ if(!m) return '<h1>Eixo não encontrado</h1><p><a href="#/aprender">Voltar</a></p>';
  const aulas=Object.entries(AULAS).filter(([id,a])=>a.modulo===m.id);
  
  const lista=aulas.map(([id,a],i)=>{
   const conc=!!estado.aulasConcluidas[id];
   return ''
-  +'<div class="card" style="display:flex;align-items:center;justify-content:space-between;margin:8px 0">'
+  +'<div class="card" style="display:flex;align-items:center;justify-content:space-between;margin:10px 0">'
    +'<div>'
-    +'<strong>'+(i+1)+'. <a href="#/aula/'+id+'">'+esc(a.titulo)+'</a></strong>'
-    +'<p class="muted" style="margin:2px 0;font-size:0.85rem">'+esc(a.nivel)+' · '+a.tempo+' min</p>'
+    +'<strong style="font-family:var(--font-serif);font-size:1.1rem">'+(i+1)+'. <a href="#/aula/'+id+'">'+esc(a.titulo)+'</a></strong>'
+    +'<p class="muted" style="margin:3px 0;font-size:0.86rem">'+esc(a.nivel)+' · tempo estimado: '+a.tempo+' min</p>'
    +'</div>'
-   +(conc?'<span class="tag concluido">✓ Concluída</span>':'<a href="#/aula/'+id+'" class="btn sm sec">Estudar</a>')
+   +(conc?'<span class="tag concluido">✓ Concluída</span>':'<a href="#/aula/'+id+'" class="btn sm sec">Fichar Aula</a>')
   +'</div>';
  }).join('');
 
  return ''
- +'<p class="muted"><a href="#/aprender">← Todos os Módulos</a></p>'
- +'<h1>Módulo '+m.id+': '+esc(m.titulo)+'</h1>'
+ +'<p class="muted"><a href="#/aprender">← Todos os Eixos</a></p>'
+ +'<h1>Eixo '+m.id+': '+esc(m.titulo)+'</h1>'
  +'<p class="muted">'+esc(m.desc)+'</p>'
- +'<div style="margin:20px 0">'+lista+'</div>';
+ +'<div style="margin:24px 0">'+lista+'</div>';
 }
 
-/* View: Aula */
+/* View: Aula (com Leitor Zen e Foco Ergonômico) */
 function viewAula(id){
  const a=AULAS[id];
  if(!a) return '<h1>Aula não encontrada</h1><p><a href="#/aprender">Voltar</a></p>';
@@ -846,55 +1116,64 @@ function viewAula(id){
 
  const secoesHtml=(a.secoes||[]).map(s=>''
   +'<h2>'+esc(s.t)+'</h2>'
-  +(s.p||[]).map(p=>'<p style="font-size:1.02rem;line-height:1.7">'+esc(p)+'</p>').join('')
-  +(s.pausa?'<div class="card" style="border-left:4px solid var(--secundaria)"><strong>Pare e reflita:</strong><p>'+esc(s.pausa.p)+'</p><details><summary style="cursor:pointer;font-weight:600;color:var(--primaria)">Ver orientação do professor</summary><p class="muted" style="margin-top:6px">'+esc(s.pausa.r)+'</p></details></div>':'')
+  +(s.p||[]).map(p=>'<p>'+esc(p)+'</p>').join('')
+  +(s.pausa?'<div class="card" style="border-left:4px solid var(--secundaria);background:var(--bg-fichamento)">'
+    +'<strong style="font-family:var(--font-serif);color:var(--primaria)">Pare e Reflita:</strong>'
+    +'<p style="margin:6px 0">'+esc(s.pausa.p)+'</p>'
+    +'<details style="margin-top:8px"><summary style="cursor:pointer;font-weight:600;color:var(--primaria)">Orientação reflexiva do professor</summary><p class="muted" style="margin-top:6px">'+esc(s.pausa.r)+'</p></details>'
+   +'</div>':'')
  ).join('');
 
  const quizHtml=(a.questoes||[]).map((q,i)=>''
-  +'<fieldset class="card" style="margin:16px 0;border:1px solid var(--borda)">'
-   +'<legend style="font-weight:700;padding:0 8px">'+(i+1)+'. '+esc(q.enunciado)+'</legend>'
+  +'<fieldset class="card" style="margin:18px 0;border:1px solid var(--borda-suave)">'
+   +'<legend style="font-weight:700;font-family:var(--font-serif);padding:0 8px">'+(i+1)+'. '+esc(q.enunciado)+'</legend>'
    +(q.alts||[]).map((t,j)=>'<label class="alt"><input type="radio" name="'+q.id+'" value="'+j+'"> <span>'+LETRAS[j]+') '+esc(t)+'</span></label>').join('')
   +'</fieldset>'
  ).join('');
 
  return ''
- +'<p class="muted"><a href="#/modulo/'+a.modulo+'">← '+(mod?esc(mod.titulo):'Módulo')+'</a></p>'
- +'<div style="display:flex;justify-content:space-between;align-items:flex-start;flex-wrap:wrap;gap:8px">'
-  +'<div>'
-   +'<h1 style="margin-bottom:4px">'+esc(a.titulo)+'</h1>'
-   +'<p class="muted">'+esc(a.disciplina)+' · '+esc(a.nivel)+' · Estimado: '+a.tempo+' min</p>'
-  +'</div>'
-  +(concl?'<span class="tag concluido">✓ Aula Concluída</span>':'<button class="btn sm" onclick="marcarConcluida(\''+id+'\')">Marcar como Concluída</button>')
+ +'<div style="display:flex;justify-content:space-between;align-items:center">'
+  +'<p class="muted"><a href="#/modulo/'+a.modulo+'">← '+(mod?esc(mod.titulo):'Eixo')+'</a></p>'
+  +'<button class="btn-header" onclick="alternarModoZen()" title="Alternar Modo Leitura Zen">🌿 Modo Zen</button>'
  +'</div>'
  
- // Barra de Ferramentas da Aula
- +'<div style="display:flex;gap:10px;flex-wrap:wrap;margin:12px 0">'
-  +'<button id="btn-audio-aula" class="btn-header" onclick="falarTexto(\''+esc(textoAudio).replace(/'/g,"\\'")+'\')">🔊 Ouvir Aula</button>'
-  +'<a href="#/professor" class="btn-header">🤖 Dúvidas desta Aula com IA</a>'
+ +'<div style="display:flex;justify-content:space-between;align-items:flex-start;flex-wrap:wrap;gap:12px;margin-top:6px">'
+  +'<div>'
+   +'<h1 style="margin-bottom:4px">'+esc(a.titulo)+'</h1>'
+   +'<p class="muted">'+esc(a.disciplina)+' · '+esc(a.nivel)+' · Leitura estimada: '+a.tempo+' min</p>'
+  +'</div>'
+  +(concl?'<span class="tag concluido">✓ Aula Concluída</span>':'<button class="btn sm" onclick="marcarConcluida(\''+id+'\')">Concluir Aula</button>')
+ +'</div>'
+ 
+ // Barra de Ferramentas Ergonômica
+ +'<div style="display:flex;gap:10px;flex-wrap:wrap;margin:14px 0">'
+  +'<button id="btn-audio-aula" class="btn-header" onclick="falarTexto(\''+esc(textoAudio).replace(/'/g,"\\'")+'\')">🔊 Ouvir Aula (Podcast)</button>'
+  +'<a href="#/professor" class="btn-header">Ψ Debater esta Aula com o Tutor</a>'
  +'</div>'
 
- // Objetivos
+ // Caixa de Objetivos Conceituais
  +'<div class="card destaque">'
-  +'<strong>Objetivos de Aprendizagem:</strong>'
-  +'<ul style="margin:8px 0 0;padding-left:20px">'+(a.objetivos||[]).map(o=>'<li>'+esc(o)+'</li>').join('')+'</ul>'
+  +'<strong style="font-family:var(--font-serif);font-size:1.05rem">Objetivos de Compreensão Epistemológica:</strong>'
+  +'<ul style="margin:8px 0 0;padding-left:22px">'+(a.objetivos||[]).map(o=>'<li>'+esc(o)+'</li>').join('')+'</ul>'
  +'</div>'
  
  +secoesHtml
  
- // Caderno de Anotações
- +'<div class="notes-box">'
-  +'<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px">'
-   +'<strong>📝 Minhas Anotações desta Aula</strong>'
-   +'<span id="status-anotacao" class="muted" style="font-size:0.8rem"></span>'
+ // Caderno de Fichamento
+ +'<div class="card" style="background:var(--bg-fichamento);border-left:4px solid var(--ambar)">'
+  +'<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px">'
+   +'<strong style="font-family:var(--font-serif);font-size:1.1rem">📝 Caderno de Fichamento da Aula</strong>'
+   +'<span id="status-anotacao" class="muted" style="font-size:0.82rem"></span>'
   +'</div>'
-  +'<textarea class="campo" placeholder="Digite seus resumos, percepções e conexões conceituais..." oninput="salvarAnotacaoAula(\''+id+'\', this.value)">'+esc(anotacaoAtual)+'</textarea>'
+  +'<p class="muted" style="margin-top:0;font-size:0.9rem">Registre seus resumos analíticos, pontes entre teorias e impressões críticas. Salvo automaticamente no seu navegador.</p>'
+  +'<textarea class="campo" style="min-height:120px" placeholder="Escreva seu fichamento acadêmico aqui..." oninput="salvarAnotacaoAula(\''+id+'\', this.value)">'+esc(anotacaoAtual)+'</textarea>'
  +'</div>'
  
- // Questionário de Fixação
- +'<h2>Questões de Fixação</h2>'
+ // Questões de Fixação
+ +'<h2>Avaliação Formativa</h2>'
  +'<form id="form-quiz" onsubmit="event.preventDefault(); submeterQuiz(\''+id+'\', this)">'
   +quizHtml
-  +'<button type="submit" class="btn">Conferir Respostas</button>'
+  +'<button type="submit" class="btn">Submeter Respostas</button>'
  +'</form>'
  +'<div id="resultado-quiz"></div>';
 }
@@ -902,7 +1181,7 @@ function viewAula(id){
 window.marcarConcluida = function(id){
  estado.aulasConcluidas[id]=true;
  salvar();
- aviso('Aula marcada como concluída! 🎉');
+ aviso('Aula concluída com sucesso! Fichamento salvo. 🌿');
  render();
 };
 
@@ -915,46 +1194,46 @@ window.submeterQuiz = function(aulaId, form){
  }
 };
 
-/* View: Revisar (Flashcards 3D) */
+/* View: Revisar (Fichas 3D de Repetição Espaçada) */
 function viewRevisar(){
  garantirTodos();
  if(filaRev===null){ filaRev=revisoesPendentes(); revIndice=0; revVerso=false; }
  
  if(!filaRev.length){
-  return '<h1>Revisão Espaçada (SRS)</h1>'
-   +'<div class="card destaque" style="text-align:center;padding:40px 20px">'
-    +'<div style="font-size:3rem;margin-bottom:12px">🎉</div>'
-    +'<h2>Tudo em dia por hoje!</h2>'
-    +'<p class="muted">Você concluiu todos os cartões agendados para a data de hoje.</p>'
-    +'<a href="#/aprender" class="btn">Continuar Aprendendo Aulas Novas</a>'
+  return '<h1>Fichamento de Repetição Espaçada</h1>'
+   +'<div class="card destaque" style="text-align:center;padding:48px 24px">'
+    +'<div style="font-size:3.5rem;margin-bottom:14px">🌿</div>'
+    +'<h2>Mente Clara: Tudo em Dia</h2>'
+    +'<p class="muted">Você revisou todas as fichas programadas pelo algoritmo de repetição para hoje.</p>'
+    +'<a href="#/aprender" class="btn">Explorar Novas Aulas</a>'
    +'</div>';
  }
 
  const cardId=filaRev[revIndice]||filaRev[0];
  const c=achaCartao(cardId);
- if(!c) return '<h1>Erro ao carregar cartão</h1>';
+ if(!c) return '<h1>Erro ao ler ficha</h1>';
 
  return ''
- +'<h1>Revisão Espaçada</h1>'
- +'<p class="muted">Cartão '+(revIndice+1)+' de '+filaRev.length+' pendente(s) hoje · <span class="tag">'+esc(c.aula)+'</span></p>'
+ +'<h1>Repetição Espaçada (SRS)</h1>'
+ +'<p class="muted">Ficha '+(revIndice+1)+' de '+filaRev.length+' pendente(s) · <span class="tag">'+esc(c.aula)+'</span></p>'
  +'<div class="flashcard-wrap" onclick="virarCard()">'
   +'<div id="flashcard-box" class="flashcard '+(revVerso?'virado':'')+'">'
    +'<div class="flashcard-lado">'
-    +'<p class="muted" style="font-size:0.85rem">FRENTE (clique para virar)</p>'
-    +'<h2 style="margin:20px 0;font-size:1.4rem">'+esc(c.frente)+'</h2>'
-    +'<span class="btn sec sm">Ver Resposta (Espaço)</span>'
+    +'<p class="muted" style="font-size:0.8rem;text-transform:uppercase;letter-spacing:0.06em">FRENTE · CLIQUE OU ESPAÇO PARA VIRAR</p>'
+    +'<h2 style="margin:22px 0;font-size:1.5rem;font-family:var(--font-serif)">'+esc(c.frente)+'</h2>'
+    +'<span class="btn sec sm">Ver Resposta no Verso</span>'
    +'</div>'
    +'<div class="flashcard-verso">'
-    +'<p class="muted" style="font-size:0.85rem">VERSO</p>'
-    +'<p style="font-size:1.15rem;margin:16px 0">'+esc(c.verso)+'</p>'
+    +'<p class="muted" style="font-size:0.8rem;text-transform:uppercase;letter-spacing:0.06em">VERSO · RESPOSTA CONCEITUAL</p>'
+    +'<p style="font-size:1.2rem;margin:18px 0;font-family:var(--font-serif);line-height:1.7">'+esc(c.verso)+'</p>'
    +'</div>'
   +'</div>'
  +'</div>'
  
- +'<div style="display:flex;justify-content:center;gap:10px;margin-top:20px;flex-wrap:wrap">'
-  +'<button class="btn sm" style="background:var(--vermelho);border-color:var(--vermelho)" onclick="avaliarCard(\''+c.id+'\', \'dificil\')">1. Difícil (1 dia)</button>'
-  +'<button class="btn sm" style="background:var(--amarelo);border-color:var(--amarelo);color:#fff" onclick="avaliarCard(\''+c.id+'\', \'bom\')">2. Bom (3 dias)</button>'
-  +'<button class="btn sm" style="background:var(--verde);border-color:var(--verde)" onclick="avaliarCard(\''+c.id+'\', \'facil\')">3. Fácil (7 dias)</button>'
+ +'<div style="display:flex;justify-content:center;gap:12px;margin-top:24px;flex-wrap:wrap">'
+  +'<button class="btn sm" style="background:var(--terracota);border-color:var(--terracota)" onclick="avaliarCard(\''+c.id+'\', \'dificil\')">1. Difícil (1 dia)</button>'
+  +'<button class="btn sm" style="background:var(--ambar);border-color:var(--ambar);color:#fff" onclick="avaliarCard(\''+c.id+'\', \'bom\')">2. Bom (3 dias)</button>'
+  +'<button class="btn sm" style="background:var(--salvia);border-color:var(--salvia)" onclick="avaliarCard(\''+c.id+'\', \'facil\')">3. Fácil (7 dias)</button>'
  +'</div>';
 }
 
@@ -973,15 +1252,15 @@ window.avaliarCard = function(id, nivel){
  render();
 };
 
-/* View: Professor Digital (IA) */
+/* View: Professor Digital (Escuta Socrática & Apoio Ético) */
 let historicoChat = [
- {tipo:'prof', texto:'Olá! Sou seu **Professor Digital de Psicologia**. Estou aqui para esclarecer dúvidas conceituais, debater casos clínicos hipotéticos e ajudar no seu método de estudos.\n\nComo posso ajudar seus estudos hoje?'}
+ {tipo:'prof', texto:'Olá! Sou seu **Professor Digital de Psicologia**. Minha proposta pedagógica é guiá-lo(a) através do método socrático, articulando os 12 eixos temáticos e as diretrizes éticas da nossa ciência.\n\nQual conceito, autor ou dilema você gostaria de investigar hoje?'}
 ];
 
 function viewProfessor(){
  const msgsHtml=historicoChat.map(m=>''
   +'<div class="chat-msg '+m.tipo+'">'
-   +'<div class="chat-avatar">'+(m.tipo==='prof'?'ψ':'👤')+'</div>'
+   +'<div class="chat-avatar">'+(m.tipo==='prof'?'Ψ':'👤')+'</div>'
    +'<div class="chat-bubble">'
     +m.texto.replace(/\*\*(.*?)\*\*/g,'<strong>$1</strong>').replace(/\n/g,'<br>')
    +'</div>'
@@ -990,24 +1269,32 @@ function viewProfessor(){
 
  return ''
  +'<h1>Professor Digital de Psicologia</h1>'
- +'<p class="muted">Tutor socrático com base em 47 aulas aprovadas e nas diretrizes éticas do CFP.</p>'
+ +'<p class="muted">Tutoria e debate acadêmico baseado no currículo científico e no Código de Ética do Psicólogo (CFP).</p>'
  
- // Sugestões de Perguntas
- +'<div style="display:flex;gap:8px;overflow-x:auto;padding-bottom:8px;margin-bottom:12px">'
+ // Sugestões Epistemológicas
+ +'<div style="display:flex;gap:10px;overflow-x:auto;padding-bottom:8px;margin-bottom:14px">'
   +'<button class="btn sec sm" onclick="perguntarDireto(\'O que é reforço negativo e como difere de punição?\')">💡 Reforço Negativo vs Punição</button>'
   +'<button class="btn sec sm" onclick="perguntarDireto(\'Como Freud estruturou o aparelho psíquico?\')">🧠 1ª e 2ª Tópicas de Freud</button>'
   +'<button class="btn sec sm" onclick="perguntarDireto(\'O que é o modelo biopsicossocial?\')">🌿 Modelo Biopsicossocial</button>'
   +'<button class="btn sec sm" onclick="perguntarDireto(\'Quais os limites éticos do sigilo no CFP?\')">⚖️ Ética e Sigilo (CFP)</button>'
  +'</div>'
 
- +'<div class="card" style="padding:16px">'
+ +'<div class="card" style="padding:20px">'
   +'<div id="chat-box" class="chat-container">'+msgsHtml+'</div>'
   +'<form id="chat-form" onsubmit="event.preventDefault(); enviarMensagemChat(this)">'
-   +'<div style="display:flex;gap:10px">'
-    +'<input id="chat-input" class="campo" placeholder="Pergunte sobre conceitos, autores, experimentos ou ética..." autocomplete="off">'
+   +'<div style="display:flex;gap:12px">'
+    +'<input id="chat-input" class="campo" placeholder="Pergunte sobre conceitos, autores, controvérsias ou ética..." autocomplete="off">'
     +'<button type="submit" class="btn" style="flex-shrink:0">Enviar</button>'
    +'</div>'
   +'</form>'
+ +'</div>'
+
+ // Banner Ético Permanente com CVV 188
+ +'<div class="banner-etico">'
+  +'<span style="font-size:1.3rem">⚖️</span>'
+  +'<div>'
+   +'<strong>Compromisso Ético & Cuidado:</strong> Este tutor tem finalidade exclusivamente formativa e acadêmica. Não realiza diagnósticos ou consultas clínicas. Se você ou alguém próximo estiver em sofrimento emocional intenso, ligue para o <strong>CVV (188)</strong>, serviço gratuito 24 horas, ou acesse <a href="https://cvv.org.br" target="_blank" rel="noopener">cvv.org.br</a>.'
+  +'</div>'
  +'</div>';
 }
 
@@ -1034,29 +1321,28 @@ window.enviarMensagemChat = async function(form){
  const box2=$('#chat-box'); if(box2) box2.scrollTop=box2.scrollHeight;
 };
 
-/* View: Biblioteca */
+/* View: Biblioteca & Glossário */
 function viewBiblioteca(){
  const glosList = GLOSSARIO.concat(typeof GLOSSARIO_CAP!=='undefined'?GLOSSARIO_CAP:[]);
- const anotacoesKeys = Object.keys(estado.anotacoes||{});
 
  return ''
- +'<h1>Biblioteca & Referências</h1>'
- +'<p class="muted">Glossário completo de termos técnicos e suas anotações pessoais.</p>'
+ +'<h1>Biblioteca & Glossário</h1>'
+ +'<p class="muted">Dicionário epistemológico com termos técnicos definidos sob o prisma pedagógico e acadêmico.</p>'
  
- +'<div style="margin:16px 0">'
-  +'<input id="busca-biblio" class="campo" type="search" placeholder="Buscar termo ou conceito no glossário..." oninput="filtrarBiblioteca(this.value)">'
+ +'<div style="margin:20px 0">'
+  +'<input id="busca-biblio" class="campo" type="search" placeholder="Buscar termo conceitual no glossário..." oninput="filtrarBiblioteca(this.value)">'
  +'</div>'
  
  +'<div id="lista-biblio">'
   +glosList.slice(0, 30).map(g=>''
-   +'<div class="card" style="margin:10px 0">'
+   +'<div class="card" style="margin:12px 0">'
     +'<div style="display:flex;justify-content:space-between;align-items:center">'
-     +'<h3 style="margin:0;color:var(--primaria)">'+esc(g.termo)+'</h3>'
-     +(g.aula?'<a href="#/aula/'+g.aula+'" class="tag">Ver Aula</a>':'')
+     +'<h3 style="margin:0;color:var(--primaria);font-family:var(--font-serif)">'+esc(g.termo)+'</h3>'
+     +(g.aula?'<a href="#/aula/'+g.aula+'" class="tag">Aula Relacionada</a>':'')
     +'</div>'
-    +'<p style="margin:6px 0"><strong>Definição:</strong> '+esc(g.simples)+'</p>'
-    +(g.academico?'<p class="muted" style="margin:4px 0"><strong>Visão Acadêmica:</strong> '+esc(g.academico)+'</p>':'')
-    +(g.exemplo?'<p class="muted" style="margin:4px 0"><strong>Exemplo:</strong> <em>'+esc(g.exemplo)+'</em></p>':'')
+    +'<p style="margin:8px 0"><strong>Definição Semântica:</strong> '+esc(g.simples)+'</p>'
+    +(g.academico?'<p class="muted" style="margin:6px 0"><strong>Rigor Acadêmico:</strong> '+esc(g.academico)+'</p>':'')
+    +(g.exemplo?'<p class="muted" style="margin:6px 0"><strong>Exemplo Clínico/Pesquisa:</strong> <em>'+esc(g.exemplo)+'</em></p>':'')
    +'</div>'
   ).join('')
  +'</div>';
@@ -1070,13 +1356,13 @@ window.filtrarBiblioteca = function(q){
  if(!el) return;
  if(!filtrados.length){ el.innerHTML='<p class="muted">Nenhum termo encontrado para "'+esc(q)+'".</p>'; return; }
  el.innerHTML = filtrados.slice(0, 30).map(g=>''
-  +'<div class="card" style="margin:10px 0">'
+  +'<div class="card" style="margin:12px 0">'
    +'<div style="display:flex;justify-content:space-between;align-items:center">'
-    +'<h3 style="margin:0;color:var(--primaria)">'+esc(g.termo)+'</h3>'
-    +(g.aula?'<a href="#/aula/'+g.aula+'" class="tag">Ver Aula</a>':'')
+    +'<h3 style="margin:0;color:var(--primaria);font-family:var(--font-serif)">'+esc(g.termo)+'</h3>'
+    +(g.aula?'<a href="#/aula/'+g.aula+'" class="tag">Aula Relacionada</a>':'')
    +'</div>'
-   +'<p style="margin:6px 0"><strong>Definição:</strong> '+esc(g.simples)+'</p>'
-   +(g.academico?'<p class="muted" style="margin:4px 0"><strong>Visão Acadêmica:</strong> '+esc(g.academico)+'</p>':'')
+   +'<p style="margin:8px 0"><strong>Definição Semântica:</strong> '+esc(g.simples)+'</p>'
+   +(g.academico?'<p class="muted" style="margin:6px 0"><strong>Rigor Acadêmico:</strong> '+esc(g.academico)+'</p>':'')
   +'</div>'
  ).join('');
 };
@@ -1087,27 +1373,27 @@ function viewPerfil(){
  return ''
  +'<h1>Perfil & Configurações</h1>'
  +'<div class="card">'
-  +'<h2>Seus Dados de Estudo</h2>'
-  +'<label>Apelido ou Nome:<br><input id="perf-nome" class="campo" value="'+esc(p.apelido||'')+'"></label>'
-  +'<div style="margin-top:14px">'
-   +'<button class="btn sm" onclick="salvarPerfil()">Salvar Alterações</button>'
+  +'<h2>Identidade Acadêmica</h2>'
+  +'<label>Nome ou Apelido:<br><input id="perf-nome" class="campo" value="'+esc(p.apelido||'')+'"></label>'
+  +'<div style="margin-top:16px">'
+   +'<button class="btn sm" onclick="salvarPerfil()">Salvar Perfil</button>'
   +'</div>'
  +'</div>'
  
  +'<div class="card">'
   +'<h2>Conexão com a API do Professor Digital</h2>'
   +'<p class="muted">Configure a URL do servidor local (api_server.py) ou chave de IA.</p>'
-  +'<label>Endpoint do Servidor Local:<br><input id="perf-api" class="campo" value="'+esc(estado.apiServidor||'http://localhost:8000/api')+'"></label>'
-  +'<div style="margin-top:14px">'
-   +'<button class="btn sm" onclick="salvarConfigAPI()">Salvar Configuração da API</button>'
+  +'<label>Endpoint da API REST:<br><input id="perf-api" class="campo" value="'+esc(estado.apiServidor||'http://localhost:8000/api')+'"></label>'
+  +'<div style="margin-top:16px">'
+   +'<button class="btn sm" onclick="salvarConfigAPI()">Salvar Endpoint</button>'
   +'</div>'
  +'</div>'
  
  +'<div class="card">'
-  +'<h2>Backup e Armazenamento</h2>'
-  +'<p class="muted">Todos os seus estudos ficam salvos exclusivamente neste navegador.</p>'
-  +'<button class="btn sec sm" onclick="exportarBackup()">📥 Exportar Dados (Backup)</button>'
-  +'<button class="btn sec sm" onclick="$(\'#file-import\').click()">📤 Importar Backup</button>'
+  +'<h2>Preservação e Portabilidade de Dados</h2>'
+  +'<p class="muted">Seus dados e fichamentos residem exclusivamente na memória deste navegador.</p>'
+  +'<button class="btn sec sm" onclick="exportarBackup()">📥 Baixar Backup (JSON)</button>'
+  +'<button class="btn sec sm" onclick="$(\'#file-import\').click()">📤 Restaurar Backup</button>'
   +'<input type="file" id="file-import" style="display:none" onchange="importarBackup(event)" accept=".json">'
  +'</div>';
 }
@@ -1116,19 +1402,19 @@ window.salvarPerfil = function(){
  estado.perfil=estado.perfil||{};
  estado.perfil.apelido=$('#perf-nome').value.trim();
  salvar();
- aviso('Perfil atualizado com sucesso!');
+ aviso('Perfil acadêmico atualizado com sucesso! 🌿');
 };
 
 window.salvarConfigAPI = function(){
  estado.apiServidor=$('#perf-api').value.trim();
  salvar();
- aviso('Configurações de API salvas!');
+ aviso('Configurações da API salvas!');
 };
 
 window.exportarBackup = function(){
  const blob=new Blob([JSON.stringify(estado, null, 2)], {type:'application/json'});
  const url=URL.createObjectURL(blob);
- const a=document.createElement('a'); a.href=url; a.download='psicobase-backup-'+dataISO()+'.json'; a.click();
+ const a=document.createElement('a'); a.href=url; a.download='psicobase-academico-'+dataISO()+'.json'; a.click();
  URL.revokeObjectURL(url);
 };
 
@@ -1141,7 +1427,7 @@ window.importarBackup = function(e){
      if(d && typeof d==='object'){
        estado=Object.assign(estadoPadrao(), d);
        salvar();
-       aviso('Backup restaurado com sucesso!');
+       aviso('Backup acadêmico restaurado com sucesso!');
        render();
      }
    }catch(err){ aviso('Arquivo de backup inválido.'); }
@@ -1175,14 +1461,14 @@ function executarBuscaModal(q){
  
  let h='';
  if(aulasMatch.length){
-   h+='<strong>Aulas Encontradas:</strong><ul style="padding-left:20px">';
+   h+='<strong style="font-family:var(--font-serif)">Aulas Encontradas:</strong><ul style="padding-left:22px;margin-top:6px">';
    aulasMatch.slice(0,5).forEach(([id,a])=>{
      h+='<li><a href="#/aula/'+id+'" onclick="fecharBuscaModal()">'+esc(a.titulo)+'</a> <span class="muted">('+esc(a.disciplina)+')</span></li>';
    });
    h+='</ul>';
  }
  if(termosMatch.length){
-   h+='<strong style="margin-top:12px;display:block">Termos no Glossário:</strong><ul style="padding-left:20px">';
+   h+='<strong style="font-family:var(--font-serif);margin-top:14px;display:block">Termos no Glossário:</strong><ul style="padding-left:22px;margin-top:6px">';
    termosMatch.slice(0,5).forEach(g=>{
      h+='<li><strong>'+esc(g.termo)+':</strong> '+esc(g.simples)+'</li>';
    });
@@ -1229,7 +1515,7 @@ function render(){
   if(ativo) a.setAttribute('aria-current','page'); else a.removeAttribute('aria-current');
  });
  
- document.title=(r==='inicio'||!estado.perfil?'PsicoBase · Plataforma de Estudos':'PsicoBase · '+r.toUpperCase());
+ document.title=(r==='inicio'||!estado.perfil?'PsicoBase · Acolhimento e Rigor na Psicologia':'PsicoBase · '+r.toUpperCase());
  window.scrollTo(0, 0);
 }
 
@@ -1253,7 +1539,7 @@ with open(r"c:\Users\MatheusRochaLopes\Desktop\PsycoBase\index.html", "w", encod
 with open(r"c:\Users\MatheusRochaLopes\Desktop\PsycoBase\PsicoBase.html", "w", encoding="utf-8") as f:
     f.write(novo_html)
 
-# Atualiza também o arquivo em Downloads para que o arquivo ativo do usuário fique atualizado
+# Atualiza também o arquivo em Downloads
 try:
     with open(r"c:\Users\MatheusRochaLopes\Downloads\PsicoBase (2).html", "w", encoding="utf-8") as f:
         f.write(novo_html)
@@ -1261,5 +1547,5 @@ try:
 except Exception as e:
     print("Aviso ao salvar em downloads:", e)
 
-print("Build concluído com sucesso!")
+print("Build com Design Editorial Humanista concluído com sucesso!")
 print("Tamanho do index.html gerado:", len(novo_html), "caracteres")
