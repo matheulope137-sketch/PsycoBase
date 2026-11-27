@@ -1,8 +1,12 @@
 import json
+import sys
 import threading
 import time
 import urllib.request
 from api_server import ThreadedHTTPServer, ProfessorAPIHandler
+
+if hasattr(sys.stdout, "reconfigure"):
+    sys.stdout.reconfigure(encoding="utf-8")
 
 TEST_PORT = 8123
 
